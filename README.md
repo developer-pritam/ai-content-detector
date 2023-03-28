@@ -1,8 +1,10 @@
 # GPT-2 Data based AI Content Detector
 
-## Live URL
+## Important Links
 
-https://aicheck.developerpritam.in
+Live URL: https://aicheck.developerpritam.in
+
+Github : https://github.com/developer-pritam/ai-content-detector
 
 ## Running a detector model
 
