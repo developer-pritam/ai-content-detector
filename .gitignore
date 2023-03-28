@@ -1,0 +1,5 @@
+.mypy_cache/
+data/
+**/*.pt
+detector-base.pt
+./detector-base.pt

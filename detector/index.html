@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Content Detector</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script>
+      const darkMode = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      if (darkMode) {
+        document.documentElement.classList.add("dark");
+      }
+
+      async function checkContent() {
+        const text = document.querySelector("#text-input").value;
+        if (text.length < 50) {
+          alert("Please enter at least 50 characters.");
+          return;
+        }
+        const progressBar = document.querySelector("#progress-bar");
+        const progressBarBg = document.querySelector("#progress-bar-bg");
+        const humanPercentageLabel =
+          document.querySelector("#human-percentage");
+        const aiPercentageLabel = document.querySelector("#ai-percentage");
+        const apiUrl = `https://aicheck.developerpritam.in/?${text}`;
+
+        try {
+          const response = await fetch(apiUrl);
+          const data = await response.json();
+
+          const fakeProbability = data.fake_probability * 100;
+          const realProbability = data.real_probability * 100;
+          progressBar.style.width = `${realProbability}%`;
+          progressBarBg.style.backgroundImage =
+            "linear-gradient(to right, #FF8888, #FF0000)";
+          humanPercentageLabel.textContent = `${realProbability.toFixed(
+            2
+          )}% Human`;
+          aiPercentageLabel.textContent = `${fakeProbability.toFixed(2)}% AI`;
+        } catch (error) {
+          console.error("Error fetching API data:", error);
+        }
+      }
+    </script>
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-900 text-white flex flex-col">
+    <header class="bg-gray-800 shadow">
+      <div class="container mx-auto px-4 py-6">
+        <h1 class="text-3xl font-bold text-center">AI Content Detector</h1>
+      </div>
+    </header>
+    <main class="container mx-auto px-4 py-6 flex-grow">
+      <div class="h-full flex flex-col justify-between max-w-lg mx-auto">
+        <p class="text-lg mb-4">
+          Welcome to our AI-generated text detection demo! Our model is trained
+          on a large dataset from the GPT2 model. Enter your text, and our model
+          will analyze whether it's AI-generated or not. Test our model's
+          accuracy! Reliable results start at around 50 tokens.
+        </p>
+        <div class="flex-grow mb-4">
+          <textarea
+            id="text-input"
+            class="w-full px-4 py-2 text-lg bg-gray-700 rounded h-full"
+            placeholder="Type your text here"
+            style="height: 100%"
+          ></textarea>
+        </div>
+        <div class="flex flex-col items-center">
+          <button
+            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg w-full mb-4"
+            type="submit"
+            onclick="checkContent()"
+          >
+            Check Content
+          </button>
+          <div
+            id="progress-bar-bg"
+            class="w-full h-6 mt-4 rounded-full bg-gray-700 relative"
+          >
+            <div
+              id="progress-bar"
+              class="h-6 rounded-full bg-blue-600"
+              style="width: 0%"
+            ></div>
+            <div
+              id="human-percentage"
+              class="absolute left-2 top-0 text-sm"
+            ></div>
+            <div
+              id="ai-percentage"
+              class="absolute right-2 top-0 text-sm"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer class="bg-gray-800 py-4">
+      <div class="container mx-auto px-4">
+        <p class="text-center text-lg font-bold">
+          Created by
+          <a href="https://developerpritam.in" target="_blank">
+            Developer Pritam
+          </a>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
